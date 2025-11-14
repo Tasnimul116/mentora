@@ -61,7 +61,7 @@ export function Footer() {
 
   return (
     <>
-      <footer className="bg-white">
+      <footer className="bg-white border-t border-gray-200">
         <div className="container mx-auto  py-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="md:col-span-1 lg:col-span-1 space-y-4">
@@ -201,7 +201,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-t dark:border-gray-400">
+        <div className="border-t dark:border-gray-200">
           <div className="container mx-auto  py-6 text-center text-sm">
             <p>© {new Date().getFullYear()} Mentora. All Rights Reserved.</p>
           </div>

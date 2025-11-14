@@ -14,20 +14,20 @@ export default function SignInPage() {
   }, [user, navigate]);
 
   return (
-   <div className="flex w-full">
-  {/* Left Column - Fixed Image */}
-  <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-12 bg-gray-50 relative overflow-hidden">
+<div className="flex w-full py-16">
+  {/* Left Column - Image */}
+  <div className="hidden lg:flex w-full lg:w-1/2 items-center justify-center   relative overflow-hidden">
     <img
       src="/auth.png"
       alt="Sign In Illustration"
-      className="w-full max-w-3xl z-10 rounded-lg fixed top-1/2 left-1/4 transform -translate-y-1/2 -translate-x-1/2"
+      className="w-full z-10 rounded-lg"
     />
     <div className="absolute -top-16 -left-16 w-48 h-48 bg-purple-100 rounded-full opacity-50"></div>
   </div>
 
   {/* Right Column - Form */}
-  <div className="w-full lg:w-1/2 flex items-center justify-center p-8 md:p-12">
-    <div className="max-w-md w-full">
+  <div className="w-full lg:w-1/2 flex items-center justify-center ">
+    <div className="w-full max-w-md">
       {/* Header Text */}
       <h1 className="text-3xl font-bold text-gray-900 mb-2">Sign In!</h1>
       <p className="text-gray-600 mb-8">
@@ -49,7 +49,7 @@ export default function SignInPage() {
 
       {/* Sign Up Link */}
       <p className="mt-6 text-center text-sm text-gray-600">
-        Don't have an account yet?{' '}
+        Don’t have an account yet?{' '}
         <Link
           to="/signup"
           className="font-medium text-purple-600 hover:underline"
@@ -60,6 +60,7 @@ export default function SignInPage() {
     </div>
   </div>
 </div>
+
 
   );
 }

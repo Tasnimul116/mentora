@@ -64,9 +64,9 @@ export default function NewPasswordPage() {
 
   useEffect(() => {
     const userData = localStorage.getItem('tp_user_data');
-    if (!userData) {
-      router.push('/forgot-password');
-    }
+    // if (!userData) {
+    //   router.push('/forgot-password');
+    // }
    
     dispatch(resetError());
   }, [router, dispatch]);
@@ -93,19 +93,20 @@ export default function NewPasswordPage() {
   };
 
   return (
-   <div className="flex w-full">
+   <div className="flex w-full py-16">
   {/* Left Column - Fixed Image */}
-  <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-12 bg-gray-50 relative overflow-hidden">
-    <img
-      src="/auth.png"
-      alt="New Password Illustration"
-      className="fixed top-1/2 left-1/4 z-10 w-full max-w-2xl rounded-lg transform -translate-y-1/2 -translate-x-1/2"
-    />
-    <div className="fixed -top-16 -left-16 w-48 h-48 rounded-full bg-purple-100 opacity-50"></div>
-  </div>
+  <div className="hidden lg:flex lg:w-1/2 items-center justify-center  relative overflow-hidden">
+  <img
+    src="/auth.png"
+    alt="Sign In Illustration"
+    className="w-full max-w-3xl z-10 rounded-lg"
+  />
+  <div className="absolute -top-16 -left-16 w-48 h-48 bg-purple-100 rounded-full opacity-50"></div>
+</div>
+
 
   {/* Right Column - Form */}
-  <div className="w-full lg:w-1/2 flex items-center justify-center p-8 md:p-12">
+  <div className="w-full lg:w-1/2 flex items-center justify-center ">
     <div className="max-w-md w-full">
       {dialogOpen ? (
         // --- Success State ---

@@ -70,86 +70,91 @@ export default function ForgotPasswordPage() {
   };
   // --- End OnSubmit Logic ---
 
- return (
-  <div className="flex w-full">
-    {/* Left Column - Fixed Image */}
-    <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-12 bg-gray-50 relative overflow-hidden">
-      <img
-        src="/auth.png"
-        alt="Forgot Password Illustration"
-        className="fixed top-1/2 left-1/4 z-10 w-full max-w-3xl rounded-lg transform -translate-y-1/2 -translate-x-1/2"
-      />
-      <div className="fixed -top-16 -left-16 w-48 h-48 rounded-full bg-purple-100 opacity-50"></div>
-    </div>
+  return (
+    <div className="flex w-full py-16">
+      {/* Left Column - Fixed Image */}
+      <div className="relative hidden items-center justify-center overflow-hidden   lg:flex lg:w-1/2">
+        <img
+          src="/auth.png"
+          alt="Sign In Illustration"
+          className="z-10 w-full  rounded-lg"
+        />
+        <div className="absolute -left-16 -top-16 h-48 w-48 rounded-full bg-purple-100 opacity-50"></div>
+      </div>
 
-    {/* Right Column - Form */}
-    <div className="w-full lg:w-1/2 flex items-center justify-center p-8 md:p-12">
-      <div className="max-w-md w-full">
-        {/* Header Text */}
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Forgot Password?</h1>
-        <p className="text-gray-600 mb-8">
-          No worries! Just enter the email address you used to sign up, and we'll send you an OTP to reset it.
-        </p>
+      {/* Right Column - Form */}
+      <div className="flex w-full items-center justify-center  lg:w-1/2">
+        <div className="w-full max-w-md">
+          {/* Header Text */}
+          <h1 className="mb-2 text-3xl font-bold text-gray-900">
+            Forgot Password?
+          </h1>
+          <p className="mb-8 text-gray-600">
+            No worries! Just enter the email address you used to sign up, and
+            we'll send you an OTP to reset it.
+          </p>
 
-        {/* --- Inlined Form JSX --- */}
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>
-                    Email <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="jhon@gmail.com"
-                      disabled={loading}
-                      {...field}
-                      className="h-12 w-full"
-                    />
-                  </FormControl>
-                  {fieldState.error && (
-                    <FormMessage>{fieldState.error.message}</FormMessage>
-                  )}
-                </FormItem>
-              )}
-            />
-
-            <Button
-              type="submit"
-              disabled={loading}
-              className="h-12 w-full bg-supperagent text-base font-semibold hover:bg-supperagent/90 text-white"
+          {/* --- Inlined Form JSX --- */}
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="w-full space-y-4"
             >
-              {loading ? 'Sending OTP...' : 'Send OTP'}
-            </Button>
-          </form>
-        </Form>
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field, fieldState }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Email <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        placeholder="jhon@gmail.com"
+                        disabled={loading}
+                        {...field}
+                        className="h-12 w-full"
+                      />
+                    </FormControl>
+                    {fieldState.error && (
+                      <FormMessage>{fieldState.error.message}</FormMessage>
+                    )}
+                  </FormItem>
+                )}
+              />
 
-        {error && (
-          <Badge
-            variant="outline"
-            className="mt-4 w-full justify-center border-red-500 py-2 text-red-500"
-          >
-            {error}
-          </Badge>
-        )}
+              <Button
+                type="submit"
+                disabled={loading}
+                className="h-12 w-full bg-supperagent text-base font-semibold text-white hover:bg-supperagent/90"
+              >
+                {loading ? 'Sending OTP...' : 'Send OTP'}
+              </Button>
+            </form>
+          </Form>
 
-        {/* Back to Sign In Link */}
-        <p className="mt-6 text-center text-sm text-gray-600">
-          Remembered your password?{' '}
-          <Link
-            to="/login"
-            className="font-medium text-purple-600 hover:underline"
-          >
-            Sign in
-          </Link>
-        </p>
+          {error && (
+            <Badge
+              variant="outline"
+              className="mt-4 w-full justify-center border-red-500 py-2 text-red-500"
+            >
+              {error}
+            </Badge>
+          )}
+
+          {/* Back to Sign In Link */}
+          <p className="mt-6 text-center text-sm text-gray-600">
+            Remembered your password?{' '}
+            <Link
+              to="/login"
+              className="font-medium text-purple-600 hover:underline"
+            >
+              Sign in
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
-  </div>
-);
-
+  );
 }
