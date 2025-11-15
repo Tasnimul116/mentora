@@ -8,9 +8,10 @@ export default function SignInPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) {
-      navigate('/dashboard');
-    }
+     if (user?.role) {
+    if (user.role === 'student') navigate('/student');
+    else if (['admin', 'instructor', 'company'].includes(user.role)) navigate('/dashboard');
+  }
   }, [user, navigate]);
 
   return (

@@ -226,8 +226,7 @@ const getNavItemsByRole = (role: string) => {
   switch (role) {
     case 'admin':
       return adminNav;
-    case 'student':
-      return studentNav;
+    
     case 'instructor':
       return instructorNav;
     case 'company':

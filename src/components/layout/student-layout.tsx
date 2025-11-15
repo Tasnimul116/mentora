@@ -1,8 +1,8 @@
 import { Mail, Phone } from "lucide-react";
 import { Footer } from "../shared/Footer";
-import { TopNav } from "../shared/top-nav";
+import { StudentNav } from "../shared/student-nav";
 
-export default function PublicLayout({
+export default function StudentLayout({
   children
 }: {
   children: React.ReactNode;
@@ -34,12 +34,11 @@ export default function PublicLayout({
         </div>
       </div>
       
-      <TopNav />
+      <StudentNav />
       
-      <main className="overflow-auto "> {/* Added classes for scrolling */}
+      <main className="overflow-hidden "> 
         {children}
       </main>
-      <Footer/>
     </div>
   );
 }

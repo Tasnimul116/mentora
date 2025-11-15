@@ -13,6 +13,11 @@ import HomePage from '@/pages/homePage';
 import  CoursePage  from '@/pages/coursePage';
 import CourseDetailPage from '@/pages/coursePage/courseDetails';
 import { ContactPage } from '@/pages/auth/contactPage';
+import { CartPage } from '@/pages/cartPage';
+import StudentLayout from '@/components/layout/student-layout';
+import { StudentDashboard } from '@/pages/dashboard/rolewise-dashboard/student-dashboard';
+import { CourseDetails } from '@/pages/enrollCourse/courseDetail';
+import { MyCourses } from '@/pages/myCourse';
 const SignInPage = lazy(() => import('@/pages/auth/signin'));
 const DashboardPage = lazy(() => import('@/pages/dashboard'));
 
@@ -44,6 +49,47 @@ export default function AppRouter() {
     }
   ];
 
+    const StudentRoutes = [
+    {
+      path: '/student',
+      element: (
+        <StudentLayout>
+          <ProtectedRoute>
+            <Suspense>
+              <Outlet />
+            </Suspense>
+          </ProtectedRoute>
+        </StudentLayout>
+      ),
+      children: [
+        {
+          element: <StudentDashboard />,
+          index: true
+        },
+        {
+          path: 'courses',
+          element: <CoursePage />
+        },
+         {
+          path: 'my-courses',
+          element: <MyCourses />
+        },
+         {
+          path: 'courses/:id',
+          element: <CourseDetails />
+        },
+         {
+          path: 'contact',
+          element: <ContactPage />
+        },
+        {
+          path: 'cart',
+          element: <CartPage />,
+          index: true
+        },
+      ]
+    }
+  ];
   const publicRoutes = [
     {
       path: '/',
@@ -67,6 +113,7 @@ export default function AppRouter() {
           element: <CoursePage />,
           index: true
         },
+        
          {
           path: '/courses/:id',
           element: <CourseDetailPage />,
@@ -110,7 +157,7 @@ export default function AppRouter() {
     }
   ];
 
-  const routes = useRoutes([...publicRoutes, ...adminRoutes]);
+  const routes = useRoutes([...StudentRoutes,...publicRoutes, ...adminRoutes]);
 
   return routes;
 }

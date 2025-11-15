@@ -3,14 +3,16 @@ import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import authReducer from './features/authSlice';
 import profileReducer from './features/profileSlice';
+import cartReducer from './features/cartSlice'
 const persistConfig = {
-  key: 'investment',
+  key: 'mentora',
   storage
 };
 
 const rootReducer = combineReducers({
   auth: authReducer,
-  profile: profileReducer
+  profile: profileReducer,
+  cart: cartReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -55,6 +55,7 @@ export default function UserAuthForm() {
   const router = useRouter();
   const { loading, error } = useSelector((state: any) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
+  const { user } = useSelector((state: any) => state.auth);
 
   // State for password visibility
   const [showPassword, setShowPassword] = useState(false); // <-- Added state
@@ -70,10 +71,17 @@ export default function UserAuthForm() {
 
   const onSubmit = async (data: UserFormValue) => {
     const result: any = await dispatch(loginUser(data));
-    if (result?.payload?.success) {
-      router.push('/dashboard');
-    }
+    console.log(result)
+   
+  
   };
+
+  useEffect(() => {
+  if (user?.role) {
+    if (user.role === 'student') router.push('/student');
+    else if (['admin', 'instructor', 'company'].includes(user.role)) router.push('/dashboard');
+  }
+}, [user]);
 
   const handleGoogleLogin = async () => {
     await signInWithGoogle();
@@ -149,7 +157,7 @@ export default function UserAuthForm() {
                 <FormControl>
                   <Input
                     type="email"
-                    placeholder="admin@gmail.com"
+                    placeholder="example@gmail.com"
                     disabled={loading}
                     {...field}
                     className="h-12 w-full"

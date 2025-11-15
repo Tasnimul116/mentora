@@ -61,8 +61,6 @@ export default function DashboardPage() {
       
       case 'admin':
         return <AdminDashboard />;
-        case 'student':
-        return <StudentDashboard />;
         case 'company':
         return <CompanyDashboard />;
       

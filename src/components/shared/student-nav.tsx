@@ -8,27 +8,29 @@ import {
   X,
   Plus,
   Minus,
-  Trash
+  Trash,
+  LogOut
 } from 'lucide-react';
-import { NavLink as RouterNavLink } from 'react-router-dom';
+import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   decreaseQuantity,
   increaseQuantity,
   removeItem
 } from '@/redux/features/cartSlice';
+import { logout } from '@/redux/features/authSlice';
 
-// Logo (no change)
+// Logo
 function Logo() {
   return (
-    <RouterNavLink to="/" className="flex items-center space-x-2">
+    <RouterNavLink to="/student" className="flex items-center space-x-2">
       <GraduationCap className="h-10 w-10 text-supperagent" />
       <span className="text-3xl font-bold text-supperagent">Mentora</span>
     </RouterNavLink>
   );
 }
 
-// NavLink (no change)
+// NavLink
 function NavLink({ to, children }) {
   return (
     <li>
@@ -48,17 +50,23 @@ function NavLink({ to, children }) {
   );
 }
 
-// TopNav (Updated)
-export function TopNav() {
+// TopNav
+export function StudentNav() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { cartItems, totalQuantity } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
-  const { user } = useSelector((state: any) => state.auth);
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
+
+  const handleLogout = async () => {
+    dispatch(logout());
+    navigate('/');
+  };
 
   const cartButtonRef = useRef(null);
   const cartDropdownRef = useRef(null);
 
-  // Handlers for the new actions
+  // Cart actions
   const handleIncrease = (id) => {
     dispatch(increaseQuantity(id));
   };
@@ -71,7 +79,7 @@ export function TopNav() {
     dispatch(removeItem(id));
   };
 
-  // Effect to close dropdown (no change)
+  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (
@@ -85,31 +93,34 @@ export function TopNav() {
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isCartOpen]);
 
-
- const handleGoToCart = () => {
-    setIsCartOpen(false);
-    if (user) {
-      window.location.href = "/student/cart"; 
-    } else {
-      window.location.href = "/login";
-    }
-  };
   return (
     <div className="z-[9999] flex items-center justify-between bg-white p-4 shadow-sm">
       <div className="container mx-auto flex items-center justify-between px-4">
-        {/* Left Side (no change) */}
+        {/* Left Side */}
         <div className="flex items-center space-x-40">
           <Logo />
           <nav>
             <ul className="flex items-center space-x-8 font-medium">
-              <NavLink to="/">Home</NavLink>
-              <NavLink to="/courses">Courses</NavLink>
-              <NavLink to="/contact">Contact</NavLink>
+              <li>
+                <RouterNavLink
+                  to="/student"
+                  end
+                  className={({ isActive }) =>
+                    `pb-1 ${
+                      isActive
+                        ? 'border-b-2 border-supperagent font-medium text-supperagent'
+                        : 'text-gray-600 hover:text-supperagent'
+                    }`
+                  }
+                >
+                  Home
+                </RouterNavLink>
+              </li>
+              <NavLink to="/student/courses">Courses</NavLink>
+              <NavLink to="/student/contact">Contact</NavLink>
             </ul>
           </nav>
         </div>
@@ -120,7 +131,7 @@ export function TopNav() {
             <Heart className="h-5 w-5" />
           </button>
 
-          {/* Cart Section */}
+          {/* Cart */}
           <div className="relative">
             <button
               ref={cartButtonRef}
@@ -152,11 +163,11 @@ export function TopNav() {
                             className="h-16 w-16 rounded-md object-cover"
                           />
                           <div className="ml-3 min-w-0 flex-1">
-                            <p className=" font-medium text-xs text-gray-800">
+                            <p className="text-xs font-medium text-gray-800">
                               {item.title}
                             </p>
 
-                            {/* Quantity Selector */}
+                            {/* Quantity */}
                             <div className="mt-1 flex items-center gap-2">
                               <button
                                 type="button"
@@ -182,7 +193,6 @@ export function TopNav() {
                             </span>
                           </div>
 
-                          {/* Remove button */}
                           <button
                             type="button"
                             onClick={() => handleRemove(item.id)}
@@ -195,11 +205,11 @@ export function TopNav() {
                       ))}
                     </ul>
 
-                    {/* Total Price */}
+                    {/* Total */}
                     <div className="border-t border-gray-200 p-4">
                       <div className="mb-2 flex justify-between font-medium text-gray-800">
                         <span>Total:</span>
-                        <span className='font-bold'>
+                        <span className="font-bold">
                           $
                           {cartItems
                             .reduce(
@@ -210,13 +220,13 @@ export function TopNav() {
                         </span>
                       </div>
 
-                      <div
-                        
-                        onClick={() => handleGoToCart()}
+                      <RouterNavLink
+                        to="/student/cart"
+                        onClick={() => setIsCartOpen(false)}
                         className="block w-full rounded-md bg-supperagent px-4 py-2 text-center text-sm font-medium text-white hover:bg-supperagent/90"
                       >
                         Go to Cart
-                      </div>
+                      </RouterNavLink>
                     </div>
                   </>
                 ) : (
@@ -228,21 +238,23 @@ export function TopNav() {
             )}
           </div>
 
-          {/* Auth Buttons (no change) */}
+          {/* My Courses */}
           <RouterNavLink
-            to="/login"
+            to="/student/my-courses"
             className="flex items-center space-x-2 rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
           >
             <User className="h-4 w-4" />
-            <span>Log in</span>
+            <span>My Course</span>
           </RouterNavLink>
-          <RouterNavLink
-            to="/signup"
-            className="flex items-center space-x-2 rounded-md bg-supperagent px-4 py-2 text-sm font-medium text-white hover:bg-supperagent/90"
+
+          {/* Logout */}
+          <div
+            onClick={handleLogout}
+            className="flex cursor-pointer items-center space-x-2 rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
           >
-            <span>Sign up</span>
-            <ArrowUpRight className="h-4 w-4" />
-          </RouterNavLink>
+            <LogOut className="h-4 w-4" />
+            <span>Log Out</span>
+          </div>
         </div>
       </div>
     </div>
