@@ -27,6 +27,10 @@ import CreateLessonPage from '@/pages/courseLesson/createLesson';
 import EditLessonPage from '@/pages/courseLesson/editLesson';
 import CategoryPage from '@/pages/categoryPage';
 import EditCoursePage from '@/pages/adminCourse/editCourse';
+import StudentPage from '@/pages/studentPage';
+import OrganizationPage from '@/pages/orgnizationPage';
+import InstructorPage from '@/pages/InstructorPage';
+import QuestionBankPage from '@/pages/questionPage';
 const SignInPage = lazy(() => import('@/pages/auth/signin'));
 const DashboardPage = lazy(() => import('@/pages/dashboard'));
 
@@ -67,20 +71,36 @@ export default function AppRouter() {
           element: <EditCoursePage />
         },
          {
-          path: 'course-modules',
+          path: 'courses/:cid/course-modules',
           element: <CourseModulesPage />
         },
         {
-          path: 'lessons',
+          path: 'courses/:cid/course-modules/:mid/lessons',
           element: <LessonsPage />
         },
          {
-          path: 'lessons/create',
+          path: 'courses/:cid/course-modules/:mid/lessons/create',
           element: <CreateLessonPage />
         },
          {
-          path: 'lessons/edit/:id',
+          path: 'courses/:cid/course-modules/:mid/lessons/edit/:id',
           element: <EditLessonPage />
+        },
+         {
+          path: 'students',
+          element: <StudentPage />
+        },
+         {
+          path: 'organizations',
+          element: <OrganizationPage />
+        },
+         {
+          path: 'instructors',
+          element: <InstructorPage />
+        },
+        {
+          path: 'questions',
+          element: <QuestionBankPage />
         },
       ]
     }

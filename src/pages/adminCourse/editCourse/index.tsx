@@ -9,6 +9,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import axiosInstance from "@/lib/axios";
 import Select from "react-select";
 import { BlinkingDots } from '@/components/shared/blinking-dots';
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+
 
 interface Category {
   _id: string;
@@ -265,6 +268,32 @@ export default function EditCoursePage() {
     setRequirements(requirements.filter((_, idx) => idx !== i));
   };
 
+
+
+    const quillModules = {
+    toolbar: [
+      [{ header: [1, 2, 3, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      ['link'],
+      ['clean']
+    ]
+  };
+
+  const quillFormats = [
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'list',
+    'bullet',
+    'link'
+  ];
+
+
+
+  
   if (initialLoading) {
     return (
       <div className="flex justify-center py-6">
@@ -383,12 +412,15 @@ export default function EditCoursePage() {
             {/* Description */}
             <div>
               <Label>Description</Label>
-              <Textarea 
-                value={formData.description} 
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })} 
-                rows={3} 
-                placeholder="Brief course description" 
-              />
+             <ReactQuill
+    theme="snow"
+    value={formData.description}
+    onChange={(value) => setFormData({ ...formData, description: value })}
+           placeholder="Write a detailed course description..."
+                className="mt-2 h-[250px] pb-8"
+                modules={quillModules}
+                formats={quillFormats}
+  />
             </div>
 
             {/* Learning Outcomes */}

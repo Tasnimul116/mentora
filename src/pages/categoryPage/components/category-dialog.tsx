@@ -10,19 +10,25 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import ErrorMessage from '@/components/shared/error-message';
 import { useEffect } from 'react';
+import { Label } from '@/components/ui/label';
 
 interface CategoryFormData {
-    name: string;
+  name: string;
 }
 
 interface CategoryDialogProps {
-    open: boolean;
-    onOpenChange: (open: boolean) => void;
-    onSubmit: (data: CategoryFormData) => void;
-    initialData: CategoryFormData | null;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSubmit: (data: CategoryFormData) => void;
+  initialData: CategoryFormData | null;
 }
 
-export function CategoryDialog({ open, onOpenChange, onSubmit, initialData }: CategoryDialogProps) {
+export function CategoryDialog({
+  open,
+  onOpenChange,
+  onSubmit,
+  initialData
+}: CategoryDialogProps) {
   const {
     register,
     handleSubmit,
@@ -30,18 +36,20 @@ export function CategoryDialog({ open, onOpenChange, onSubmit, initialData }: Ca
     formState: { errors }
   } = useForm<CategoryFormData>({
     defaultValues: {
-      name: '',
+      name: ''
     }
   });
 
   useEffect(() => {
-    if (open) {
-      reset();
-      if (initialData) {
-        reset(initialData);
-      }
+  if (open) {
+    if (initialData) {
+     reset(initialData);
+    } else {
+     reset({ name: '' });
     }
-  }, [open, reset, initialData]);
+  }
+}, [open, reset, initialData]);
+
 
   const onSubmitForm = (data: CategoryFormData) => {
     onSubmit(data);
@@ -60,7 +68,9 @@ export function CategoryDialog({ open, onOpenChange, onSubmit, initialData }: Ca
         <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium">Category Name *</label>
+              <Label className="block text-sm font-medium pb-4">
+                Category Name *
+              </Label>
               <Input
                 {...register('name', { required: 'Category Name is required' })}
                 placeholder="Category Name"
@@ -70,7 +80,11 @@ export function CategoryDialog({ open, onOpenChange, onSubmit, initialData }: Ca
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+            >
               Cancel
             </Button>
             <Button

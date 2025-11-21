@@ -51,7 +51,7 @@ export function NavMain({ items }: { items: NavItem[] }) {
           >
             <CollapsibleTrigger asChild>
               <SidebarMenuButton
-                className={`flex items-center justify-between gap-2 hover:bg-supperagent hover:text-white ${level > 0 ? 'pl-2' : ''}`}
+                className={`flex items-center h-10 justify-between gap-2 hover:bg-supperagent hover:text-white ${level > 0 ? 'pl-2' : ''}`}
               >
                 <div className="flex items-center gap-2">
                   {item.icon && <item.icon size={16} />}
@@ -65,20 +65,20 @@ export function NavMain({ items }: { items: NavItem[] }) {
               </SidebarMenuButton>
             </CollapsibleTrigger>
 
-            <CollapsibleContent className="mt-1.5 animate-in slide-in-from-left-3">
+            <CollapsibleContent className="mt-1.5  animate-in slide-in-from-left-3">
               <SidebarMenuSub>
                 {item.items?.map((subItem) => (
                   <SidebarMenuSubItem key={subItem.title}>
                     {subItem.items && subItem.items.length > 0 ? (
                       renderMenuItem(subItem, level + 1)
                     ) : (
-                      <SidebarMenuSubItem key={subItem.title}>
+                      <SidebarMenuSubItem key={subItem.title} className='h-10'>
                         {subItem.items && subItem.items.length > 0 ? (
                           renderMenuItem(subItem, level + 1)
                         ) : (
                           <SidebarMenuSubButton
                             asChild
-                            className={`hover:bg-supperagent hover:text-white ${level > 0 ? 'pl-2' : ''}`}
+                            className={`hover:bg-supperagent h-10 hover:text-white ${level > 0 ? 'pl-2' : ''}`}
                           >
                             <Link
                               to={subItem.url || '#'}
@@ -99,7 +99,7 @@ export function NavMain({ items }: { items: NavItem[] }) {
         ) : (
           <SidebarMenuButton
             asChild
-            className={`hover:bg-supperagent hover:text-white ${level > 0 ? 'pl-2' : ''} ${isActive ? 'bg-supperagent text-white' : ''}`}
+            className={`hover:bg-supperagent h-10 hover:text-white ${level > 0 ? 'pl-2' : ''} ${isActive ? 'bg-supperagent text-white' : ''}`}
           >
             <Link to={item.url || '#'} className="flex items-center gap-2">
               {item.icon && <item.icon size={16} />}

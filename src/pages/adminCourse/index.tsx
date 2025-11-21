@@ -22,6 +22,7 @@ import { useNavigate } from 'react-router-dom';
 import axiosInstance from "@/lib/axios"
 import { BlinkingDots } from '@/components/shared/blinking-dots';
 import { useToast } from '@/components/ui/use-toast';
+import { DataTablePagination } from '@/components/shared/data-table-pagination';
 
 export default function AdminCoursesPage() {
   const [courses, setCourses] = useState<any>([]);
@@ -191,7 +192,7 @@ export default function AdminCoursesPage() {
                                 size="icon"
                                 className="h-8 w-8 "
                                 onClick={() =>
-                                  navigate(`/dashboard/course-modules?course=${course._id}`)
+                                  navigate(`${course._id}/course-modules`)
                                 }
                               >
                                 <FileText className="h-4 w-4" />
@@ -225,6 +226,17 @@ export default function AdminCoursesPage() {
               </TableBody>
             </Table>
           )}
+
+
+           {courses.length > 40 && (
+                      <DataTablePagination
+                        pageSize={entriesPerPage}
+                        setPageSize={setEntriesPerPage}
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                      />
+                    )}
         </CardContent>
       </Card>
     </div>

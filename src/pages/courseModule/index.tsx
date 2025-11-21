@@ -1,5 +1,14 @@
 import { useEffect, useState } from 'react';
-import { Plus, Pen, MoveLeft, BookOpen, X, Save, Trash2, Search } from 'lucide-react';
+import {
+  Plus,
+  Pen,
+  MoveLeft,
+  BookOpen,
+  X,
+  Save,
+  Trash2,
+  Search
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Table,
@@ -16,7 +25,7 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from '@/components/ui/tooltip';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import {
   Dialog,
@@ -25,20 +34,20 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  DialogTrigger
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import axiosInstance from '@/lib/axios';
 import { BlinkingDots } from '@/components/shared/blinking-dots';
+import { DataTablePagination } from '@/components/shared/data-table-pagination';
 
 export default function CourseModulesPage() {
   const [modules, setModules] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const [courseName, setCourseName] = useState('');
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const courseId = searchParams.get('course');
+  const { cid } = useParams();
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogMode, setDialogMode] = useState<'create' | 'edit'>('create');
   const [currentModule, setCurrentModule] = useState<any>(null);
@@ -48,28 +57,35 @@ export default function CourseModulesPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [entriesPerPage, setEntriesPerPage] = useState(100);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    if (courseId) {
+    if (cid) {
       fetchData(currentPage, entriesPerPage, searchTerm);
     }
-  }, [currentPage, entriesPerPage, courseId]);
+  }, [currentPage, entriesPerPage, cid]);
 
-  const fetchData = async (page: number, entriesPerPage: number, searchTerm = "") => {
+  const fetchData = async (
+    page: number,
+    entriesPerPage: number,
+    searchTerm = ''
+  ) => {
     setLoading(true);
     try {
       // Fetch course name
-      const courseResponse = await axiosInstance.get(`/courses/${courseId}`);
+      const courseResponse = await axiosInstance.get(`/courses/${cid}`);
       setCourseName(courseResponse.data.data?.title || 'Course');
 
-      const modulesResponse = await axiosInstance.get(`/course-modules?courseId=${courseId}`, {
-        params: {
-          page,
-          limit: entriesPerPage,
-          ...(searchTerm ? { searchTerm } : {}),
+      const modulesResponse = await axiosInstance.get(
+        `/course-modules?courseId=${cid}`,
+        {
+          params: {
+            page,
+            limit: entriesPerPage,
+            ...(searchTerm ? { searchTerm } : {})
+          }
         }
-      });
+      );
       setTotalPages(modulesResponse.data.data.meta.totalPage);
 
       setModules(modulesResponse.data.data?.result || []);
@@ -88,9 +104,9 @@ export default function CourseModulesPage() {
     try {
       const response = await axiosInstance.post('/course-modules', {
         title: formData.title,
-        courseId
+        courseId: cid
       });
-      setModules(prev => [...prev, response.data.data]);
+      setModules((prev) => [...prev, response.data.data]);
       setFormData({ title: '' });
       setOpenDialog(false);
     } catch (error) {
@@ -101,11 +117,14 @@ export default function CourseModulesPage() {
   const handleUpdateModule = async () => {
     if (!currentModule) return;
     try {
-      const response = await axiosInstance.patch(`/course-modules/${currentModule._id}`, {
-        title: formData.title
-      });
-      setModules(prev =>
-        prev.map(module =>
+      const response = await axiosInstance.patch(
+        `/course-modules/${currentModule._id}`,
+        {
+          title: formData.title
+        }
+      );
+      setModules((prev) =>
+        prev.map((module) =>
           module._id === currentModule._id ? response.data.data : module
         )
       );
@@ -120,7 +139,9 @@ export default function CourseModulesPage() {
     if (!deletingModuleId) return;
     try {
       await axiosInstance.delete(`/course-modules/${deletingModuleId}`);
-      setModules(prev => prev.filter(module => module._id !== deletingModuleId));
+      setModules((prev) =>
+        prev.filter((module) => module._id !== deletingModuleId)
+      );
       setDeletingModuleId(null);
       setDeleteConfirmOpen(false);
     } catch (error) {
@@ -153,11 +174,12 @@ export default function CourseModulesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div>
-          <div className='flex flex-row items-center gap-4'>
-
-            <h1 className="text-3xl font-bold tracking-tight">Course Modules</h1>
+          <div className="flex flex-row items-center gap-4">
+            <h1 className="text-3xl font-bold tracking-tight">
+              Course Modules
+            </h1>
             <div className="flex items-center space-x-4">
               <Input
                 type="text"
@@ -169,7 +191,7 @@ export default function CourseModulesPage() {
               <Button
                 onClick={handleSearch}
                 size="default"
-                className="bg-supperagent hover:bg-supperagent/90 h-8 px-4"
+                className="h-8 bg-supperagent px-4 hover:bg-supperagent/90"
               >
                 <Search className="mr-2 h-4 w-4" />
                 Search
@@ -183,12 +205,7 @@ export default function CourseModulesPage() {
           )}
         </div>
         <div className="flex flex-row items-center gap-4">
-
-          <Button
-            size="default"
-            onClick={() => navigate(-1)}
-            variant="outline"
-          >
+          <Button size="default" onClick={() => navigate(-1)} variant="outline">
             <MoveLeft className="mr-2 h-4 w-4" />
             Back
           </Button>
@@ -196,7 +213,7 @@ export default function CourseModulesPage() {
             size="default"
             onClick={openCreateDialog}
             className="bg-supperagent hover:bg-supperagent/90"
-            disabled={!courseId}
+            disabled={!cid}
           >
             <Plus className="mr-2 h-4 w-4" />
             New Module
@@ -217,7 +234,7 @@ export default function CourseModulesPage() {
               <Button
                 onClick={openCreateDialog}
                 className="mt-4 bg-supperagent hover:bg-supperagent/90"
-                disabled={!courseId}
+                disabled={!cid}
               >
                 Create your first module
               </Button>
@@ -233,8 +250,9 @@ export default function CourseModulesPage() {
               <TableBody>
                 {modules.map((module: any, index: number) => (
                   <TableRow key={module?._id}>
-
-                    <TableCell className="font-medium">{module?.title}</TableCell>
+                    <TableCell className="font-medium">
+                      {module?.title}
+                    </TableCell>
 
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
@@ -246,9 +264,7 @@ export default function CourseModulesPage() {
                                 size="icon"
                                 className="h-8 w-8"
                                 onClick={() =>
-                                  navigate(
-                                    `/dashboard/lessons?moduleId=${module?._id}&courseId=${courseId}`
-                                  )
+                                  navigate(`${module._id}/lessons`)
                                 }
                               >
                                 <BookOpen className="h-4 w-4" />
@@ -301,56 +317,68 @@ export default function CourseModulesPage() {
               </TableBody>
             </Table>
           )}
+          {modules.length > 40 && (
+            <DataTablePagination
+              pageSize={entriesPerPage}
+              setPageSize={setEntriesPerPage}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          )}
         </CardContent>
       </Card>
 
       {/* Create/Edit Module Dialog */}
-   <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-  <DialogContent className="sm:max-w-3xl p-6 rounded-xl shadow-lg border">
-    <DialogHeader className="space-y-2 text-center">
-      <DialogTitle className="text-2xl font-semibold">
-        {dialogMode === "create" ? "Create New Module" : "Edit Module"}
-      </DialogTitle>
-      <DialogDescription className="text-base text-muted-foreground">
-        {dialogMode === "create"
-          ? "Provide the necessary information to add a new module."
-          : "Modify the details of the selected module."}
-      </DialogDescription>
-    </DialogHeader>
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+        <DialogContent className="rounded-xl border p-6 shadow-lg sm:max-w-3xl">
+          <DialogHeader className="space-y-2 text-center">
+            <DialogTitle className="text-2xl font-semibold">
+              {dialogMode === 'create' ? 'Create New Module' : 'Edit Module'}
+            </DialogTitle>
+            <DialogDescription className="text-base text-muted-foreground">
+              {dialogMode === 'create'
+                ? 'Provide the necessary information to add a new module.'
+                : 'Modify the details of the selected module.'}
+            </DialogDescription>
+          </DialogHeader>
 
-    <form onSubmit={handleDialogSubmit} className="mt-4 space-y-4">
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="title" className="text-lg font-medium">
-          Title
-        </Label>
-        <Input
-          id="title"
-          value={formData.title}
-          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-          placeholder="Enter module title"
-          required
-          className="h-12 text-lg"
-        />
-      </div>
+          <form onSubmit={handleDialogSubmit} className="mt-4 space-y-4">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="title" className="text-lg font-medium">
+                Title
+              </Label>
+              <Input
+                id="title"
+                value={formData.title}
+                onChange={(e) =>
+                  setFormData({ ...formData, title: e.target.value })
+                }
+                placeholder="Enter module title"
+                required
+                className="h-12 text-lg"
+              />
+            </div>
 
-      <DialogFooter className="pt-4 flex justify-end space-x-3">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => setOpenDialog(false)}
-          className="h-12 px-6 text-lg"
-        >
-          Cancel
-        </Button>
-        <Button type="submit" className="h-12 px-6 text-lg bg-supperagent hover:bg-supperagent/90">
-          <Save className="mr-2 h-5 w-5" />
-          {dialogMode === "create" ? "Create Module" : "Save Changes"}
-        </Button>
-      </DialogFooter>
-    </form>
-  </DialogContent>
-</Dialog>
-
+            <DialogFooter className="flex justify-end space-x-3 pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setOpenDialog(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                className=" bg-supperagent hover:bg-supperagent/90"
+              >
+                <Save className="mr-2 h-4 w-4" />
+                {dialogMode === 'create' ? 'Create Module' : 'Save Changes'}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
@@ -358,7 +386,8 @@ export default function CourseModulesPage() {
           <DialogHeader>
             <DialogTitle>Delete Module</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this module? This action cannot be undone.
+              Are you sure you want to delete this module? This action cannot be
+              undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

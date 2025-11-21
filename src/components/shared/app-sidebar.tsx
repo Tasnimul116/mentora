@@ -60,17 +60,16 @@ const adminNav = [
     title: 'User Management',
     icon: Users,
     items: [
-      { title: 'Organization', url: '/dashboard/admin/organizations' },
-      { title: 'Instructor', url: '/dashboard/admin/instructors' },
-      { title: 'Student', url: '/dashboard/admin/students' },
+      { title: 'Organization', url: '/dashboard/organizations' },
+      { title: 'Instructor', url: '/dashboard/instructors' },
+      { title: 'Student', url: '/dashboard/students' },
     ],
   },
   {
     title: 'Course Manage',
     icon: Box,
     items: [
-      { title: 'Subject', url: '/dashboard/admin/subjects' },
-      { title: 'Tag', url: '/dashboard/admin/tags' },
+     
       { title: 'Category', url: '/dashboard/categories' },
       { title: 'Course', url: '/dashboard/courses' },
     ],
@@ -79,8 +78,8 @@ const adminNav = [
     title: 'Setting',
     icon: Settings,
     items: [
-      { title: 'Profile', url: '/dashboard/settings/profile' },
-      { title: 'Email', url: '/dashboard/settings/email' },
+      { title: 'Profile', url: '#' },
+      { title: 'Email', url: '#' },
     ],
   },
 ];

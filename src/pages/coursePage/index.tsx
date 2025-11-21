@@ -116,9 +116,7 @@ const allTopics = useMemo(() => {
       <div className="bg-supperagent text-white py-16 px-4">
         <div className="container mx-auto">
           <h1 className="text-5xl font-bold mb-4">Explore Courses</h1>
-          <p className="text-lg text-slate-200">
-            Discover {courses.length} courses across all categories
-          </p>
+          
         </div>
       </div>
 
